@@ -37,8 +37,8 @@ RUN npm install -g lighthouse
 #VOLUME /home/chrome/reports
 #WORKDIR /home/chrome/reports
 
-VOLUME /report
-WORKDIR /report
+#VOLUME /report
+#WORKDIR /report
 
 # Disable Lighthouse error reporting to prevent prompt
 ENV CI=true
