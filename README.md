@@ -1,4 +1,4 @@
-# GitHub Action for [Lighthouse Audits](https://developers.google.com/web/tools/lighthouse/)
+# GitHub Action for [Lighthouse Auditing](https://developers.google.com/web/tools/lighthouse/)
 
 <p align="center"><img src="https://raw.githubusercontent.com/jakejarvis/lighthouse-action/master/screenshots/logo.png" alt="Lighthouse Logo" width="300px"></p>
 
@@ -20,7 +20,7 @@ The following workflow runs a Lighthouse audit on [https://jarv.is/](https://jar
 
 ```
 jobs:
-  deploy:
+  audit:
     runs-on: ubuntu-latest
     steps:
     - uses: jakejarvis/lighthouse-action@master
@@ -39,7 +39,7 @@ jobs:
 - Currently a *painfully* long build (around 2-3 mins) — maybe pre-package a headless Chrome image to speed up build?
 - Ability to customize flags passed to both Chrome and Lighthouse
 - Batch URL testing
-- Integration with Netlify's [Deploy Preview](https://www.netlify.com/docs/continuous-deployment/) to test PRs before deployment?
+- Integration with Netlify's [Deploy Preview](https://www.netlify.com/docs/continuous-deployment/) to test PRs before deployment? Or somehow run tests on "local" files from a repo.
 
 
 ## License
