@@ -24,6 +24,14 @@ jobs:
 ```
 
 
+## To-Do
+
+- Pre-package a headless Chrome image to speed up build
+- Ability to customize flags passed to both Chrome and Lighthouse
+- Batch URL testing
+- Integration with Netlify's [Deploy Preview](https://www.netlify.com/docs/continuous-deployment/) to test PRs before deployment?
+
+
 ## License
 
 [![CC0](http://mirrors.creativecommons.org/presskit/buttons/88x31/svg/cc-zero.svg)](https://creativecommons.org/publicdomain/zero/1.0/)

@@ -15,10 +15,13 @@ SCORE_SEO=$(cat ./report/lighthouse.report.json | jq '.categories["seo"].score')
 SCORE_PWA=$(cat ./report/lighthouse.report.json | jq '.categories["pwa"].score')
 
 # Print scores to standard output (out of 100 instead of 0 to 1)
-printf "Performance: %.0f\n" $((SCORE_PERFORMANCE*100))
-printf "Accessibility: %.0f\n" $((SCORE_ACCESSIBILITY*100))
-printf "Best Practices: %.0f\n" $((SCORE_PRACTICES*100))
-printf "SEO: %.0f\n" $((SCORE_SEO*100))
-printf "Progressive Web App: %.0f\n" $((SCORE_PWA*100))
+# Using hacky bc b/c bash hates floating point arithmetic
+printf "%s\n" "----------------------------------"
+printf "|  Performance:           %.0f\t|\n" $(echo "$SCORE_PERFORMANCE*100" | bc -l)
+printf "|  Accessibility:         %.0f\t|\n" $(echo "$SCORE_ACCESSIBILITY*100" | bc -l)
+printf "|  Best Practices:        %.0f\t|\n" $(echo "$SCORE_PRACTICES*100" | bc -l)
+printf "|  SEO:                   %.0f\t|\n" $(echo "$SCORE_SEO*100" | bc -l)
+printf "|  Progressive Web App:   %.0f\t|\n" $(echo "$SCORE_PWA*100" | bc -l)
+printf "%s\n" "----------------------------------"
 
 exit 0
