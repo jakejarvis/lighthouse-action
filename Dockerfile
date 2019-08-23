@@ -27,15 +27,18 @@ ARG CACHEBUST=1
 RUN npm install -g lighthouse
 
 # Add a chrome user and set up home directory for reports
-RUN groupadd --system chrome && \
-    useradd --system --create-home --gid chrome --groups audio,video chrome && \
-    mkdir --parents /home/chrome/reports && \
-    chown --recursive chrome:chrome /home/chrome
+#RUN groupadd --system chrome && \
+#    useradd --system --create-home --gid chrome --groups audio,video chrome && \
+#    mkdir --parents /home/chrome/reports && \
+#    chown --recursive chrome:chrome /home/chrome
 
-USER chrome
+#USER chrome
 
-VOLUME /home/chrome/reports
-WORKDIR /home/chrome/reports
+#VOLUME /home/chrome/reports
+#WORKDIR /home/chrome/reports
+
+VOLUME /report
+WORKDIR /report
 
 # Disable Lighthouse error reporting to prevent prompt
 ENV CI=true
