@@ -2,4 +2,7 @@
 
 set -e
 
-lighthouse --port=9222 --chrome-flags="--headless --disable-gpu --no-sandbox --no-zygote" $@
+lighthouse --port=9222 --chrome-flags="--headless --disable-gpu --no-sandbox --no-zygote" ${INPUT_URL}
+
+
+#  $@
