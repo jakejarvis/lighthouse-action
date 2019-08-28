@@ -11,6 +11,7 @@ if [ -n "${INPUT_NETLIFY_SITE}" ] && [ -n "${PULL_REQUEST_NUMBER}" ]
 then
   # PR + Netlify enabled: generate Netlify deploy preview URL
   REPORT_URL="https://deploy-preview-${PULL_REQUEST_NUMBER}--${INPUT_NETLIFY_SITE}"
+  echo "Running against Netlify Deploy Preview ${REPORT_URL}"
 else
   # Fallback to default UNPUT_URL
   REPORT_URL=${INPUT_URL}
