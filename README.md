@@ -34,13 +34,31 @@ jobs:
 ```
 
 
+### Netlify Deploy Preview
+
+This GitHub action integrates with Netlify's [Deploy Preview](https://www.netlify.com/docs/continuous-deployment/) to test PRs before deployment. To enable, you need to pass in your Netlify site like this:
+
+```
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: jakejarvis/lighthouse-action@master
+      with:
+        url: 'https://jarv.is/'
+        # Netlify site used to generate deploy preview URL
+        netlify_site: 'jakejarvis.netlify.com'
+```
+
+On pull requests, the number will be extracted from the Github event data and used to generate the deploy preview URL as follows: `https://deploy-preview-$PR_NUMBER--$NETLIFY_SITE` and override the URL. The URL will be used as fallback on pushes event.
+
+
 ## To-Do
 
 - **Make CI fail if scores do not meet specified thresholds.**
 - Currently a *painfully* long build (around 2-3 mins) — maybe pre-package a headless Chrome image to speed up build?
 - Ability to customize flags passed to both Chrome and Lighthouse
 - Batch URL testing
-- Integration with Netlify's [Deploy Preview](https://www.netlify.com/docs/continuous-deployment/) to test PRs before deployment? Or somehow run tests on "local" files from a repo.
 
 
 ## License

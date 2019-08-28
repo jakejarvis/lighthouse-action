@@ -4,7 +4,19 @@ set -e
 
 mkdir report
 
-lighthouse --port=9222 --chrome-flags="--headless --disable-gpu --no-sandbox --no-zygote" --output "html" --output "json" --output-path "report/lighthouse" ${INPUT_URL}
+# In case of push event this might be empty
+PULL_REQUEST_NUMBER=$(jq .number ${GITHUB_EVENT_PATH})
+
+if [ -n "${INPUT_NETLIFY_SITE}" ] && [ -n "${PULL_REQUEST_NUMBER}" ]
+then
+  # PR + Netlify enabled: generate Netlify deploy preview URL
+  REPORT_URL="https://deploy-preview-${PULL_REQUEST_NUMBER}--${INPUT_NETLIFY_SITE}"
+else
+  # Fallback to default UNPUT_URL
+  REPORT_URL=${INPUT_URL}
+fi
+
+lighthouse --port=9222 --chrome-flags="--headless --disable-gpu --no-sandbox --no-zygote" --output "html" --output "json" --output-path "report/lighthouse" ${REPORT_URL}
 
 # Parse individual scores from JSON output
 # Unorthodox jq syntax because of dashes -- https://github.com/stedolan/jq/issues/38
