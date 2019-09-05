@@ -4,7 +4,7 @@ set -e
 
 mkdir report
 
-set -- lighthouse --port=9222 --chrome-flags="--headless --disable-gpu --no-sandbox --no-zygote" --output "html" --output "json" --output-path "report/lighthouse" ${INPUT_URL}
+lighthouse --port=9222 --chrome-flags="--headless --disable-gpu --no-sandbox --no-zygote" --output "html" --output "json" --output-path "report/lighthouse" ${INPUT_URL}
 
 # Parse individual scores from JSON output
 # Unorthodox jq syntax because of dashes -- https://github.com/stedolan/jq/issues/38
