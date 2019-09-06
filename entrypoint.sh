@@ -17,6 +17,18 @@ else
   REPORT_URL=${INPUT_URL}
 fi
 
+# Delay test if deployment takes longer than the action
+ACTION_BUILD_TIME=180  # 3 minutes in seconds
+
+if [ "${INPUT_SITE_BUILD_TIME:0}" -gt "${ACTION_BUILD_TIME}" ]
+then
+  # Site takes longer to deploy than the action to build:
+  # wait for the latest version to be online
+  WAIT_TIME_SECONDS=`expr ${INPUT_SITE_BUILD_TIME} - ${ACTION_BUILD_TIME}`
+  echo "Sleeping for ${WAIT_TIME_SECONDS} to wait for site to be up..."
+  sleep ${WAIT_TIME_SECONDS}
+fi
+
 lighthouse --port=9222 --chrome-flags="--headless --disable-gpu --no-sandbox --no-zygote" --output "html" --output "json" --output-path "report/lighthouse" ${REPORT_URL}
 
 # Parse individual scores from JSON output

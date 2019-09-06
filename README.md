@@ -53,6 +53,22 @@ jobs:
 On pull requests, the number will be extracted from the Github event data and used to generate the deploy preview URL as follows: `https://deploy-preview-$PR_NUMBER--$NETLIFY_SITE` and override the URL. The URL will be used as fallback on pushes event.
 
 
+### Race conditions
+
+If your site takes more than ~3 mins to deploy, then the lighthouse test will likely run before your site is online and will fail. You can pass the deploy time to the action using the `site_build_time` parameter:
+
+```
+jobs:
+  audit:
+    # ...
+    - uses: jakejarvis/lighthouse-action@master
+      with:
+        # ... Same as above
+        site_build_time: 300  # 5 mins in seconds 
+```
+
+The action will try to sleep for `site_build_time - action_build_time` if your site is longer than the average time it takes to build the action. This value is ignored if under 3 mins.
+
 ## To-Do
 
 - **Make CI fail if scores do not meet specified thresholds.**
