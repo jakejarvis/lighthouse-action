@@ -56,7 +56,6 @@ On pull requests, the number will be extracted from the Github event data and us
 ## To-Do
 
 - **Make CI fail if scores do not meet specified thresholds.**
-- Currently a *painfully* long build (around 2-3 mins) — maybe pre-package a headless Chrome image to speed up build?
 - Ability to customize flags passed to both Chrome and Lighthouse
 - Batch URL testing
 
