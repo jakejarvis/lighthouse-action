@@ -8,7 +8,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Install and upgrade required utilities
 RUN apt-get update -qqy && \
-    apt-get install -qqy --no-install-recommends gnupg2 wget ca-certificates apt-transport-https && \
+    apt-get install -qqy --no-install-recommends gnupg2 wget ca-certificates jq bc apt-transport-https && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 # Install latest Chrome stable
@@ -18,6 +18,15 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     apt-get install -qqy --no-install-recommends google-chrome-stable && \
     rm /etc/apt/sources.list.d/google-chrome.list && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+# Download latest Lighthouse build from npm
+# Cache bust to ensure latest version when building the image
+ARG CACHEBUST=1
+RUN npm install -g lighthouse
+
+# Disable Lighthouse error reporting to prevent prompt
+ENV CI=true
+
 
 # Start Chrome in headless/debugging mode by default
 ENTRYPOINT ["/usr/bin/google-chrome-stable", \
