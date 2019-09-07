@@ -1,8 +1,8 @@
 FROM node:lts-slim
 
-LABEL repository="https://github.com/jakejarvis/chrome-headless-docker"
-LABEL homepage="https://jarv.is/"
-LABEL maintainer="Jake Jarvis <jake@jarv.is>"
+LABEL   repository="https://github.com/jakejarvis/chrome-headless-docker" \
+        homepage="https://jarv.is/" \
+        maintainer="Jake Jarvis <jake@jarv.is>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
