@@ -8,14 +8,7 @@ jobs:
       - uses: actions/checkout@v1
       - name: Build the base Docker image
         run: docker build . --file Dockerfile.base --tag jakejarvis/chrome-headless
-      # Using alpine since github is trying to pull the docker image before 
-      # even trying to checkout the repository
-      # TODO: Find a better way to use the image after building it
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag alpine
-      # This will not run alpine, but instead run our image that we already build since it is already in cache
-      # Testing against google since we all know that it will be online all the time
-      - uses: docker://alpine
+      - uses: ./lighthouse-action
         name: Run the app
         with:
           url: 'https://google.com'
