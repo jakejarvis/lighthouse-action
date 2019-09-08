@@ -6,8 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      # Use the newer Dockerfile.base, not the one that was used to build on DockerHub
       - name: Build the base Docker image
         run: docker build . --file Dockerfile.base --tag jakejarvis/chrome-headless
+      # This will run Dockerfile like normal, but instead of jakejarvis/chrome-headless from DockerHub we use the one built here 
       - uses: ./
         name: Run the app
         with:
