@@ -7,7 +7,7 @@ mkdir report
 # In case of push event this might be empty
 PULL_REQUEST_NUMBER=$(jq .number ${GITHUB_EVENT_PATH})
 
-if [ -n "${INPUT_NETLIFY_SITE}" ] && [ -n "${PULL_REQUEST_NUMBER}" ]
+if [ -n "${INPUT_NETLIFY_SITE}" ] && [ -n "${PULL_REQUEST_NUMBER}" ] && [ "${PULL_REQUEST_NUMBER}" != "null" ]
 then
   # PR + Netlify enabled: generate Netlify deploy preview URL
   REPORT_URL="https://deploy-preview-${PULL_REQUEST_NUMBER}--${INPUT_NETLIFY_SITE}"
