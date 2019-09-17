@@ -78,3 +78,5 @@ On pull requests, the PR number will be extracted from the GitHub event data and
 ## License
 
 This project is distributed under the [MIT license](LICENSE.md).
+
+License information for bundled third party software can be found in [THIRD_PARTY_NOTICE.md](THIRD_PARTY_NOTICE.md). 
