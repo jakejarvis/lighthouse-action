@@ -6,9 +6,9 @@ LABEL maintainer="Jake Jarvis <jake@jarv.is>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Install and upgrade required utilities
+# Install and upgrade required utilities (jq & bc required by Lighthouse Action)
 RUN apt-get update -qqy && \
-    apt-get install -qqy --no-install-recommends gnupg2 wget ca-certificates apt-transport-https && \
+    apt-get install -qqy --no-install-recommends gnupg2 wget ca-certificates apt-transport-https jq bc && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 # Install latest Chrome stable
