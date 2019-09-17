@@ -2,23 +2,22 @@
 
 set -e
 
-# Check if we're being triggered by a pull request
+# Check if we're being triggered by a pull request.
 PULL_REQUEST_NUMBER=$(jq .number "$GITHUB_EVENT_PATH")
 
 # If this is a PR and Netlify is configured, plan to check the deploy preview and generate its unique URL.
-# Otherwise, simply check the plain URL.
+# Otherwise, simply check the provided live URL.
 if [ -n "$INPUT_NETLIFY_SITE" ] && [ -n "$PULL_REQUEST_NUMBER" ] && [ "$PULL_REQUEST_NUMBER" != "null" ]; then
   REPORT_URL="https://deploy-preview-${PULL_REQUEST_NUMBER}--${INPUT_NETLIFY_SITE}"
 else
   REPORT_URL=${INPUT_URL}
 fi
 
-# Prepare directory for audit results.
-# TODO: Name files after the tested URL to allow multiple tests.
-#       Right now, a second test would overwrite the first results.
+# Prepare directory for audit results and sanitize URL to a valid and unique filename.
 OUTPUT_FOLDER="report"
-OUTPUT_PATH="$OUTPUT_FOLDER/lighthouse"
-mkdir $OUTPUT_FOLDER
+OUTPUT_FILENAME=$(echo "$REPORT_URL" | sed 's/[^a-zA-Z0-9]/_/g')
+OUTPUT_PATH="./$OUTPUT_FOLDER/$OUTPUT_FILENAME"
+mkdir "$OUTPUT_FOLDER"
 
 # Clarify in logs which URL we're auditing.
 printf "* Beginning audit of %s ...\n\n" "$REPORT_URL"
@@ -28,11 +27,11 @@ lighthouse --port=9222 --chrome-flags="--headless --disable-gpu --no-sandbox --n
 
 # Parse individual scores from JSON output.
 # Unorthodox jq syntax because of dashes -- https://github.com/stedolan/jq/issues/38
-SCORE_PERFORMANCE=$(jq '.categories["performance"].score' ./report/lighthouse.report.json)
-SCORE_ACCESSIBILITY=$(jq '.categories["accessibility"].score' ./report/lighthouse.report.json)
-SCORE_PRACTICES=$(jq '.categories["best-practices"].score' ./report/lighthouse.report.json)
-SCORE_SEO=$(jq '.categories["seo"].score' ./report/lighthouse.report.json)
-SCORE_PWA=$(jq '.categories["pwa"].score' ./report/lighthouse.report.json)
+SCORE_PERFORMANCE=$(jq '.categories["performance"].score' "$OUTPUT_PATH".report.json)
+SCORE_ACCESSIBILITY=$(jq '.categories["accessibility"].score' "$OUTPUT_PATH".report.json)
+SCORE_PRACTICES=$(jq '.categories["best-practices"].score' "$OUTPUT_PATH".report.json)
+SCORE_SEO=$(jq '.categories["seo"].score' "$OUTPUT_PATH".report.json)
+SCORE_PWA=$(jq '.categories["pwa"].score' "$OUTPUT_PATH".report.json)
 
 # Print scores to standard output (0 to 100 instead of 0 to 1).
 # Using hacky bc b/c bash hates floating point arithmetic...

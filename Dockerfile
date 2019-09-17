@@ -6,7 +6,7 @@ LABEL "com.github.actions.description"="Run tests on a webpage via Google's Ligh
 LABEL "com.github.actions.icon"="check-square"
 LABEL "com.github.actions.color"="yellow"
 
-LABEL version="0.2.2"
+LABEL version="0.3.0"
 LABEL repository="https://github.com/jakejarvis/lighthouse-action"
 LABEL homepage="https://jarv.is/"
 LABEL maintainer="Jake Jarvis <jake@jarv.is>"
