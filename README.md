@@ -66,6 +66,41 @@ jobs:
 On pull requests, the PR number will be extracted from the GitHub event data and used to generate the deploy preview URL as follows: `https://deploy-preview-[[PR_NUMBER]]--[[NETLIFY_SITE]].netlify.com`. You can combine the two above examples and include both `url` and `netlify_site` and run on `on: [push, pull_request]` and the appropriate URL will be automatically selected depending on the type of event.
 
 
+### Upload report to Zeit & add a commit status
+
+You'll need to obtain a Token [in your Zeit dashboard](https://zeit.co/account/tokens), and add it to your [repository secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets).
+
+Then, you can replace the `upload-artifact` step by an inline script as below:
+
+```yaml
+name: Audit live site
+on: push
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Audit live URL
+      uses: jakejarvis/lighthouse-action@master
+      with:
+        url: 'https://jarv.is/'
+    - name: Upload report to Zeit
+      run: |
+        now -t ${{ secrets.ZEIT_TOKEN }} deploy ./report/https*.html | tee zeit.log
+        TARGET_URL=`tail -n1 zeit.log`
+        curl -X POST https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -d "{
+            \"state\": \"success\",
+            \"target_url\": \"${TARGET_URL}\",
+            \"description\": \"Lighthouse report\",
+            \"context\": \"lighthouse-report\"
+          }"
+
+```
+
+This will add a new commit status to your repo, with a link to the HTML report.
+
 ## To-Do
 
 - **Make CI fail if scores do not meet specified thresholds.**
