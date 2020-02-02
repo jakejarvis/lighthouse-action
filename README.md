@@ -65,7 +65,52 @@ jobs:
 
 On pull requests, the PR number will be extracted from the GitHub event data and used to generate the deploy preview URL as follows: `https://deploy-preview-[[PR_NUMBER]]--[[NETLIFY_SITE]].netlify.com`. You can combine the two above examples and include both `url` and `netlify_site` and run on `on: [push, pull_request]` and the appropriate URL will be automatically selected depending on the type of event.
 
+### Comment output on PR
 
+Append the `Comment output on PR` workflow to your existing `workflow.yml`. **Make sure you also add `id: lighthouse` in the `Audit live URL` step**, so
+you can access the output. Read more about all the useable variables in the [output section](#output).
+
+```yaml
+...
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Audit live URL
+      ...
+      id: lighthouse
+    - name: Comment output on PR
+      if: github.event_name == 'pull_request'
+      uses: unsplash/comment-on-pr@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        msg: "Here is your Lighthouse score:\n
+        \n
+        Performance: ${{ steps.lighthouse.outputs.performance }}\n
+        Accessibility: ${{ steps.lighthouse.outputs.accessibility }}\n
+        Best Practices: ${{ steps.lighthouse.outputs.practices }}\n
+        SEO: ${{ steps.lighthouse.outputs.seo }}\n
+        PWA: ${{ steps.lighthouse.outputs.pwa }}\n"
+```
+
+If you have setup a Pull Request, the following message should get printed as soon as the workflow has finished
+running.
+
+![Lighthouse Score as Github Comment](screenshots/screenshot-output-comment.png)
+
+## Output
+
+The following output can be accessed in further steps using this Action. See [Comment output on PR](#comment-output-on-pr) for a real world example.
+
+| Name                                    | Description                                                                        |
+|-----------------------------------------|------------------------------------------------------------------------------------|
+| `steps.<STEP_ID>.outputs.performance`   |                                                                                    |
+| `steps.<STEP_ID>.outputs.accessibility` | These checks highlight opportunities to improve the accessibility of your web app. |
+| `steps.<STEP_ID>.outputs.practices`     |                                                                                    |
+| `steps.<STEP_ID>.outputs.seo`           | These checks ensure that your page is optimized for search engine results ranking  |
+| `steps.<STEP_ID>.outputs.pwa`           | These checks validate the aspects of a Progressive Web App.                        |
 ## To-Do
 
 - **Make CI fail if scores do not meet specified thresholds.**

@@ -48,4 +48,11 @@ printf "* Detailed results are saved here, use https://github.com/actions/upload
 printf "    %s\n" "$OUTPUT_PATH.report.html"
 printf "    %s\n" "$OUTPUT_PATH.report.json"
 
+# Print scores, so they can be used in another action step.
+echo "##[set-output name=performance;]$(echo "$SCORE_PERFORMANCE*100" | bc -l)"
+echo "##[set-output name=accessibility;]$(echo "$SCORE_ACCESSIBILITY*100" | bc -l)"
+echo "##[set-output name=practices;]$(echo "$SCORE_PRACTICES*100" | bc -l)"
+echo "##[set-output name=seo;]$(echo "$SCORE_SEO*100" | bc -l)"
+echo "##[set-output name=pwa;]$(echo "$SCORE_PWA*100" | bc -l)"
+
 exit 0
