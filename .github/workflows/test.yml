@@ -12,6 +12,20 @@ jobs:
       uses: ./
       with:
         url: 'https://github.com/'
+      id: lighthouse
+    - name: Comment output on PR
+      if: github.event_name == 'pull_request'
+      uses: unsplash/comment-on-pr@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        msg: "Here is your Lighthouse score:\n
+        \n
+        Performance: ${{ steps.lighthouse.outputs.performance }}\n
+        Accessibility: ${{ steps.lighthouse.outputs.accessibility }}\n
+        Best Practices: ${{ steps.lighthouse.outputs.practices }}\n
+        SEO: ${{ steps.lighthouse.outputs.seo }}\n
+        PWA: ${{ steps.lighthouse.outputs.pwa }}\n"
     - uses: actions/upload-artifact@master
       with:
         name: report
