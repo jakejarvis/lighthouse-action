@@ -49,6 +49,7 @@ printf "    %s\n" "$OUTPUT_PATH.report.html" > message
 printf "    %s\n" "$OUTPUT_PATH.report.json" > message
 
 printf message
+printf "test"
 
 json = File.read(ENV.fetch("GITHUB_EVENT_PATH"))
 event = JSON.parse(json)
