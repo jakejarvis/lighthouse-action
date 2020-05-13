@@ -36,16 +36,24 @@ SCORE_PWA=$(jq '.categories["pwa"].score' "$OUTPUT_PATH".report.json)
 
 # Print scores to standard output (0 to 100 instead of 0 to 1).
 # Using hacky bc b/c bash hates floating point arithmetic...
-printf "\n* Completed audit of %s ! Scores are printed below:\n\n" "$REPORT_URL"
-printf "+-------------------------------+\n"
-printf "|  Performance:           %.0f\t|\n" "$(echo "$SCORE_PERFORMANCE*100" | bc -l)"
-printf "|  Accessibility:         %.0f\t|\n" "$(echo "$SCORE_ACCESSIBILITY*100" | bc -l)"
-printf "|  Best Practices:        %.0f\t|\n" "$(echo "$SCORE_PRACTICES*100" | bc -l)"
-printf "|  SEO:                   %.0f\t|\n" "$(echo "$SCORE_SEO*100" | bc -l)"
-printf "|  Progressive Web App:   %.0f\t|\n" "$(echo "$SCORE_PWA*100" | bc -l)"
-printf "+-------------------------------+\n\n"
-printf "* Detailed results are saved here, use https://github.com/actions/upload-artifact to retrieve them:\n"
-printf "    %s\n" "$OUTPUT_PATH.report.html"
-printf "    %s\n" "$OUTPUT_PATH.report.json"
+printf "\n* Completed audit of %s ! Scores are printed below:\n\n" "$REPORT_URL" > message
+printf "+-------------------------------+\n" > message
+printf "|  Performance:           %.0f\t|\n" "$(echo "$SCORE_PERFORMANCE*100" | bc -l)" > message
+printf "|  Accessibility:         %.0f\t|\n" "$(echo "$SCORE_ACCESSIBILITY*100" | bc -l)" > message
+printf "|  Best Practices:        %.0f\t|\n" "$(echo "$SCORE_PRACTICES*100" | bc -l)" > message
+printf "|  SEO:                   %.0f\t|\n" "$(echo "$SCORE_SEO*100" | bc -l)" > message
+printf "|  Progressive Web App:   %.0f\t|\n" "$(echo "$SCORE_PWA*100" | bc -l)" > message
+printf "+-------------------------------+\n\n" > message
+printf "* Detailed results are saved here, use https://github.com/actions/upload-artifact to retrieve them:\n" > message
+printf "    %s\n" "$OUTPUT_PATH.report.html" > message
+printf "    %s\n" "$OUTPUT_PATH.report.json" > message
+
+printf message
+
+json = File.read(ENV.fetch("GITHUB_EVENT_PATH"))
+event = JSON.parse(json)
+repo = event["repository"]["full_name"]
+
+github.add_comment(repo, PULL_REQUEST_NUMBER, message)
 
 exit 0
