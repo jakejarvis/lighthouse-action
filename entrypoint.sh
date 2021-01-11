@@ -15,7 +15,7 @@ fi
 
 # The timeout (in milliseconds) to wait before the page is considered done loading and the run should continue. 
 # WARNING: Very high values can lead to large traces and instability  [number]
-if [ -n "$INPUT_WAIT_FOR_LOAD" ]
+if [ -n "$INPUT_WAIT_FOR_LOAD" ]; then
   WAIT_FOR_LOAD=$INPUT_WAIT_FOR_LOAD
 else
   WAIT_FOR_LOAD=3000
