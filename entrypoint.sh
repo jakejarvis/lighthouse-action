@@ -18,7 +18,7 @@ fi
 if [ -n "$INPUT_WAIT_FOR_LOAD" ]; then
   WAIT_FOR_LOAD=$INPUT_WAIT_FOR_LOAD
 else
-  WAIT_FOR_LOAD=3000
+  WAIT_FOR_LOAD=30000
 fi
 
 # Prepare directory for audit results and sanitize URL to a valid and unique filename.
