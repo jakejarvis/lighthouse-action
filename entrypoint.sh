@@ -13,6 +13,14 @@ else
   REPORT_URL=$INPUT_URL
 fi
 
+# The timeout (in milliseconds) to wait before the page is considered done loading and the run should continue. 
+# WARNING: Very high values can lead to large traces and instability  [number]
+if [ -n "$INPUT_WAIT_FOR_LOAD" ]
+  WAIT_FOR_LOAD=$INPUT_WAIT_FOR_LOAD
+else
+  WAIT_FOR_LOAD=3000
+fi
+
 # Prepare directory for audit results and sanitize URL to a valid and unique filename.
 OUTPUT_FOLDER="report"
 # shellcheck disable=SC2001
@@ -24,7 +32,7 @@ mkdir -p "$OUTPUT_FOLDER"
 printf "* Beginning audit of %s ...\n\n" "$REPORT_URL"
 
 # Run Lighthouse!
-lighthouse --port=9222 --chrome-flags="--headless --disable-gpu --no-sandbox --no-zygote" --output "html" --output "json" --output-path "${OUTPUT_PATH}" "${REPORT_URL}"
+lighthouse --port=9222 --max-wait-for-load=${WAIT_FOR_LOAD} --chrome-flags="--headless --disable-gpu --no-sandbox --no-zygote" --output "html" --output "json" --output-path "${OUTPUT_PATH}" "${REPORT_URL}"
 
 # Parse individual scores from JSON output.
 # Unorthodox jq syntax because of dashes -- https://github.com/stedolan/jq/issues/38
