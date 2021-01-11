@@ -30,7 +30,7 @@ jobs:
       with:
         url: 'https://jarv.is/'
         # [optional] The timeout (in milliseconds) to wait before the page is considered done loading and the run should continue. 
-        # If not set the default value is 3000
+        # If not set the default value is 30000 (30 seconds)
         wait_for_load: 180000
     - name: Upload results as an artifact
       uses: actions/upload-artifact@master
